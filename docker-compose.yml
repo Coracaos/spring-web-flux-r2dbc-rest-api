@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+   product-service-db:
+      container_name: product-service-db 
+      image: postgres:14.10
+      ports:
+      - 5432:5432
+      environment:
+      - POSTGRES_DB=product_db
+      - POSTGRES_USER=product_dba
+      - POSTGRES_PASSWORD=product_dba_123
+   product-service-api:
+      container_name: product-service-api
+      image: product-service-api:1.0
+      build: .
+      ports:
+      - 8080:8080
+      environment:
+      - DATABASE_URL=r2dbc:postgresql://product-service-db:5432/product_db
+      - DATABASE_USERNAME=product_dba
+      - DATABASE_PASSWORD=product_dba_123
+      depends_on:
+      - product-service-db
